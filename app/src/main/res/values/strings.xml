@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PracticaTema1</string>
+    <string name="welcome_message">¡Bienvenido a la aplicación!</string>
+    <string name="title_activity_formulario">FormularioActivity</string>
+</resources>
