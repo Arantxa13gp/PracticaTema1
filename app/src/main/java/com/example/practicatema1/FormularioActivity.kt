@@ -1,10 +1,10 @@
 package com.example.practicatema1
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,18 +35,26 @@ class FormularioActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            PracticaTema1Theme() {
+            PracticaTema1Theme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-                    formulario(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(innerPadding)
+                            .padding(20.dp)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        formulario()
+                        abrirPerfil()
+                    }
                 }
             }
         }
     }
 }
+
 @Composable
 fun formulario(modifier: Modifier = Modifier){
     var nombre by remember { mutableStateOf("") }
@@ -57,20 +65,15 @@ fun formulario(modifier: Modifier = Modifier){
     var direccion by remember { mutableStateOf("") }
     var fechaNacimiento by remember { mutableStateOf("") }
 
-
     Column(
         modifier = modifier.fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Text("Nombre")
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
             label = { Text("Nombre") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -80,9 +83,7 @@ fun formulario(modifier: Modifier = Modifier){
             value = apellidos,
             onValueChange = { apellidos = it },
             label = { Text("Apellidos") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -90,11 +91,9 @@ fun formulario(modifier: Modifier = Modifier){
         Text("Contraseña")
         OutlinedTextField(
             value = contrasena,
-            onValueChange = {contrasena = it},
-            label = {Text("Contraseña")},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ),
+            onValueChange = { contrasena = it },
+            label = { Text("Contraseña") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -102,11 +101,9 @@ fun formulario(modifier: Modifier = Modifier){
         Text("Telefono")
         OutlinedTextField(
             value = telefono,
-            onValueChange = {telefono = it},
-            label = {Text("Telefono")},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Phone
-            ),
+            onValueChange = { telefono = it },
+            label = { Text("Telefono") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -114,11 +111,9 @@ fun formulario(modifier: Modifier = Modifier){
         Text("Correo Electronico")
         OutlinedTextField(
             value = correo,
-            onValueChange = {correo = it},
-            label = {Text("Correo Electronico")},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ),
+            onValueChange = { correo = it },
+            label = { Text("Correo Electronico") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -126,11 +121,9 @@ fun formulario(modifier: Modifier = Modifier){
         Text("Direccion")
         OutlinedTextField(
             value = direccion,
-            onValueChange = {direccion = it},
-            label = {Text("Direccion")},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
+            onValueChange = { direccion = it },
+            label = { Text("Direccion") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -138,25 +131,24 @@ fun formulario(modifier: Modifier = Modifier){
         Text("Fecha de Nacimiento")
         OutlinedTextField(
             value = fechaNacimiento,
-            onValueChange = {fechaNacimiento = it},
-            label = {Text("Fecha de Nacimiento")},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
+            onValueChange = { fechaNacimiento = it },
+            label = { Text("Fecha de Nacimiento") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
     }
-    abrirPerfil()
 }
+
 @Composable
 fun abrirPerfil(){
-
     val contexto = LocalContext.current
 
     Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.BottomCenter
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp, bottom = 20.dp),
+        contentAlignment = Alignment.Center
     ) {
         Button(
             onClick = {
@@ -168,4 +160,3 @@ fun abrirPerfil(){
         }
     }
 }
-

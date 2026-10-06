@@ -35,22 +35,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-/*@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PracticaTema1Theme {
-        Greeting("Android")
-    }
-}*/
-
 @Composable
 fun abrirFormulario(modifier: Modifier = Modifier) {
     val contexto = LocalContext.current
