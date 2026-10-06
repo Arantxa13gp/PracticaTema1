@@ -1,20 +1,27 @@
 package com.example.practicatema1
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.practicatema1.ui.theme.PracticaTema1Theme
 
@@ -22,12 +29,13 @@ class PerfilActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val nombre = intent.getStringExtra("EXTRA_NOMBRE") ?: "[Nombre]"
-        val apellidos = intent.getStringExtra("EXTRA_APELLIDOS") ?: "[Apellidos]"
-        val telefono = intent.getStringExtra("EXTRA_TELEFONO") ?: "[Telefono]"
-        val correo = intent.getStringExtra("EXTRA_CORREO") ?: "[Correo Electronico]"
-        val direccion = intent.getStringExtra("EXTRA_DIRECCION") ?: "[Direccion]"
-        val fechaNacimiento = intent.getStringExtra("EXTRA_FECHA") ?: "[Fecha de Nacimiento]"
+        val nombre = intent.getStringExtra("NOMBRE") ?: "[Nombre]"
+        val apellidos = intent.getStringExtra("APELLIDOS") ?: "[Apellidos]"
+        val contraseña = intent.getStringExtra("CONTRASEÑA") ?: "[Contraseña]"
+        val telefono = intent.getStringExtra("TELEFONO") ?: "[Telefono]"
+        val correo = intent.getStringExtra("CORREO") ?: "[Correo Electronico]"
+        val direccion = intent.getStringExtra("DIRECCION") ?: "[Direccion]"
+        val fechaNacimiento = intent.getStringExtra("FECHA") ?: "[Fecha de Nacimiento]"
 
         setContent {
             PracticaTema1Theme {
@@ -42,12 +50,14 @@ class PerfilActivity : ComponentActivity() {
                         Contenido(
                             nombre = nombre,
                             apellidos = apellidos,
+                            contraseña = contraseña,
                             telefono = telefono,
                             correo = correo,
                             direccion = direccion,
                             fechaNacimiento = fechaNacimiento
                         )
                     }
+                    editarFormulario()
                 }
             }
         }
@@ -58,6 +68,7 @@ class PerfilActivity : ComponentActivity() {
 fun Contenido(
     nombre: String,
     apellidos: String,
+    contraseña: String,
     telefono: String,
     correo: String,
     direccion: String,
@@ -80,6 +91,16 @@ fun Contenido(
             label = { Text("Apellidos") },
             readOnly = true,
             modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+            singleLine = true
+        )
+
+        Text("Contraseña")
+        OutlinedTextField(
+            value = contraseña,
+            onValueChange = {},
+            label = { Text("Contraseña") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
@@ -118,5 +139,25 @@ fun Contenido(
             modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
             singleLine = true
         )
+    }
+}
+
+@Composable
+fun editarFormulario(modifier: Modifier = Modifier) {
+    val contexto = LocalContext.current
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            onClick = {
+                val intent = Intent(contexto, FormularioActivity::class.java)
+                contexto.startActivity(intent)
+            },
+            modifier = modifier
+        ) {
+            Text("Editar Formulario")
+        }
     }
 }
