@@ -1,5 +1,6 @@
 package com.example.practicatema1
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -29,22 +31,29 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.practicatema1.ui.theme.PracticaTema1Theme
-import java.sql.Date
 
 class FormularioActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val initialNombre = intent.getStringExtra("NOMBRE") ?: ""
+        val initialApellidos = intent.getStringExtra("APELLIDOS") ?: ""
+        val initialContraseña = intent.getStringExtra("CONTRASEÑA") ?: ""
+        val initialTelefono = intent.getStringExtra("TELEFONO") ?: ""
+        val initialCorreo = intent.getStringExtra("CORREO") ?: ""
+        val initialDireccion = intent.getStringExtra("DIRECCION") ?: ""
+        val initialFechaNacimiento = intent.getStringExtra("FECHA") ?: ""
+
         setContent {
             PracticaTema1Theme {
-                var nombre by remember { mutableStateOf("") }
-                var apellidos by remember { mutableStateOf("") }
-                var contraseña by remember { mutableStateOf("") }
-                var telefono by remember { mutableStateOf("") }
-                var correo by remember { mutableStateOf("") }
-                var direccion by remember { mutableStateOf("") }
-                var fechaNacimiento by remember { mutableStateOf("") }
+                var nombre by remember { mutableStateOf(initialNombre) }
+                var apellidos by remember { mutableStateOf(initialApellidos) }
+                var contraseña by remember { mutableStateOf(initialContraseña) }
+                var telefono by remember { mutableStateOf(initialTelefono) }
+                var correo by remember { mutableStateOf(initialCorreo) }
+                var direccion by remember { mutableStateOf(initialDireccion) }
+                var fechaNacimiento by remember { mutableStateOf(initialFechaNacimiento) }
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
@@ -54,7 +63,6 @@ class FormularioActivity : ComponentActivity() {
                             .fillMaxWidth()
                             .padding(innerPadding)
                             .padding(20.dp)
-                            .verticalScroll(rememberScrollState())
                     ) {
                         formulario(
                             nombre = nombre, onNombreChange = { nombre = it },
@@ -65,15 +73,33 @@ class FormularioActivity : ComponentActivity() {
                             direccion = direccion, onDireccionChange = { direccion = it },
                             fechaNacimiento = fechaNacimiento, onFechaNacimientoChange = { fechaNacimiento = it }
                         )
-
                         abrirPerfil(
-                            nombre = nombre,
-                            apellidos = apellidos,
-                            contraseña = contraseña,
-                            telefono = telefono,
-                            correo = correo,
-                            direccion = direccion,
-                            fechaNacimiento = fechaNacimiento
+                            onClick = {
+                                if (callingActivity != null) {
+                                    val resultIntent = Intent().apply {
+                                        putExtra("NOMBRE", nombre)
+                                        putExtra("APELLIDOS", apellidos)
+                                        putExtra("CONTRASEÑA", contraseña)
+                                        putExtra("TELEFONO", telefono)
+                                        putExtra("CORREO", correo)
+                                        putExtra("DIRECCION", direccion)
+                                        putExtra("FECHA", fechaNacimiento)
+                                    }
+                                    setResult(Activity.RESULT_OK, resultIntent)
+                                    finish()
+                                } else {
+                                    val intent = Intent(this@FormularioActivity, PerfilActivity::class.java).apply {
+                                        putExtra("NOMBRE", nombre)
+                                        putExtra("APELLIDOS", apellidos)
+                                        putExtra("CONTRASEÑA", contraseña)
+                                        putExtra("TELEFONO", telefono)
+                                        putExtra("CORREO", correo)
+                                        putExtra("DIRECCION", direccion)
+                                        putExtra("FECHA", fechaNacimiento)
+                                    }
+                                    startActivity(intent)
+                                }
+                            }
                         )
                     }
                 }
@@ -96,72 +122,66 @@ fun formulario(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        Text("Nombre")
         OutlinedTextField(
             value = nombre,
-            onValueChange = onNombreChange,
             label = { Text("Nombre") },
+            onValueChange = onNombreChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
-        Text("Apellidos")
         OutlinedTextField(
             value = apellidos,
-            onValueChange = onApellidosChange,
             label = { Text("Apellidos") },
+            onValueChange = onApellidosChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
-        Text("Contraseña")
         OutlinedTextField(
             value = contraseña,
-            onValueChange = onContraseñaChange,
             label = { Text("Contraseña") },
+            onValueChange = onContraseñaChange,
+            visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
-        Text("Telefono")
         OutlinedTextField(
             value = telefono,
-            onValueChange = onTelefonoChange,
             label = { Text("Telefono") },
+            onValueChange = onTelefonoChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
-        Text("Correo Electronico")
         OutlinedTextField(
             value = correo,
-            onValueChange = onCorreoChange,
             label = { Text("Correo Electronico") },
+            onValueChange = onCorreoChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
-        Text("Direccion")
         OutlinedTextField(
             value = direccion,
-            onValueChange = onDireccionChange,
             label = { Text("Direccion") },
+            onValueChange = onDireccionChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
-        Text("Fecha de Nacimiento")
         OutlinedTextField(
             value = fechaNacimiento,
-            onValueChange = onFechaNacimientoChange,
             label = { Text("Fecha de Nacimiento") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = onFechaNacimientoChange,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -170,16 +190,8 @@ fun formulario(
 
 @Composable
 fun abrirPerfil(
-    nombre: String,
-    apellidos: String,
-    contraseña: String,
-    telefono: String,
-    correo: String,
-    direccion: String,
-    fechaNacimiento: String
+    onClick: () -> Unit
 ){
-    val contexto = LocalContext.current
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -187,20 +199,10 @@ fun abrirPerfil(
         contentAlignment = Alignment.BottomCenter
     ) {
         Button(
-            onClick = {
-                val intent = Intent(contexto, PerfilActivity::class.java).apply {
-                    putExtra("NOMBRE", nombre)
-                    putExtra("APELLIDOS", apellidos)
-                    putExtra("CONTRASEÑA", contraseña)
-                    putExtra("TELEFONO", telefono)
-                    putExtra("CORREO", correo)
-                    putExtra("DIRECCION", direccion)
-                    putExtra("FECHA", fechaNacimiento)
-                }
-                contexto.startActivity(intent)
-            }
+            onClick = onClick,
+            modifier = Modifier.width(130.dp)
         ) {
-            Text("Ver perfil")
+            Text("Ver Perfil")
         }
     }
 }
